@@ -2,8 +2,8 @@
 #
 # bootstrap installs things.
 
-cd "$(dirname "$0")/.."
-DOTFILES_ROOT=$(pwd -P)
+DOTFILES_ROOT="$HOME/.dotfiles"
+REPO_URL='https://github.com/jakemack/dotfiles.git'
 
 set -e
 
@@ -146,30 +146,28 @@ install_homebrew () {
 }
 
 clone_repo () {
-  local install_dir="$HOME/.dotfiles2"
-  local repo_url='https://github.com/jakemack/dotfiles.git'
-  if [ -d "$install_dir" ]
+  if [ -d "$DOTFILES_ROOT" ]
   then
-    cd "$install_dir"
-    if [ ! "$(ls -A "$install_dir")" ]
+    cd "$DOTFILES_ROOT"
+    if [ ! "$(ls -A "$DOTFILES_ROOT")" ]
     then
-      info "$install_dir exists but is empty, cloning repo"
-      git clone "$repo_url" "$install_dir"
-    elif [ ! -d '.git' ] || [ "$(git config --get remote.origin.url)" != "$repo_url" ]
+      info "$DOTFILES_ROOT exists but is empty, cloning repo"
+      git clone "$REPO_URL" "$DOTFILES_ROOT"
+    elif [ ! -d '.git' ] || [ "$(git config --get remote.origin.url)" != "$REPO_URL" ]
     then
-      fail "Data in $install_dir, cannot clone repo"
+      fail "Data in $DOTFILES_ROOT, cannot clone repo"
     fi
     cd "$old_dir"
   else
-    git clone "$repo_url" "$install_dir"
+    git clone "$REPO_URL" "$DOTFILES_ROOT"
   fi
-  cd "$install_dir/"
+  cd "$DOTFILES_ROOT"
 }
 
 install_homebrew
 clone_repo
 setup_gitconfig
-#install_dotfiles
+install_dotfiles
 
 # If we're on a Mac, let's install and setup homebrew.
 #if [ "$(uname -s)" == "Darwin" ]
