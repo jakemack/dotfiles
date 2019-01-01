@@ -2,17 +2,17 @@
 [include]
   path = ~/.gitconfig.local
 [alias]
-  wtf     = !$ZSH/bin/git-wtf
+  wtf     = !$DOTFILES_PATH/bin/git-wtf
   count   = !git shortlog -sn
 [color]
   ui = auto
 [core]
-	autocrlf = input
+  autocrlf = input
   excludesfile = ~/.gitignore
   editor = nano
-	pager = less
+  pager =
 [merge]
-	ff = only
+  ff = only
 [mergetool]
   keepBackup = false
 [difftool]
@@ -20,6 +20,6 @@
 [push]
   default = simple
 [pager]
-	log = less
+  log = less
 [tag]
   sort = v:refname

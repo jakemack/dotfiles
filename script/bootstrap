@@ -27,6 +27,36 @@ fail () {
   exit
 }
 
+install_homebrew () {
+  if test ! $(which brew)
+  then
+    info "  Installing Homebrew for you."
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+  # Upgrade homebrew
+  info "› brew update"
+  brew update | while read line; do info "$line"; done
+}
+
+clone_repo () {
+  if [ -d "$DOTFILES_ROOT" ]
+  then
+    cd "$DOTFILES_ROOT"
+    if [ ! "$(ls -A "$DOTFILES_ROOT")" ]
+    then
+      info "$DOTFILES_ROOT exists but is empty, cloning repo"
+      git clone "$REPO_URL" "$DOTFILES_ROOT"
+    elif [ ! -d '.git' ] || [ "$(git config --get remote.origin.url)" != "$REPO_URL" ]
+    then
+      fail "Data in $DOTFILES_ROOT, cannot clone repo"
+    fi
+    cd "$old_dir"
+  else
+    git clone "$REPO_URL" "$DOTFILES_ROOT"
+  fi
+  cd "$DOTFILES_ROOT"
+}
+
 setup_gitconfig () {
   if ! [ -f git/gitconfig.local.symlink ]
   then
@@ -48,7 +78,6 @@ setup_gitconfig () {
     success 'gitconfig'
   fi
 }
-
 
 link_file () {
   local src=$1 dst=$2
@@ -137,49 +166,44 @@ install_dotfiles () {
   done
 }
 
-install_homebrew () {
-  if test ! $(which brew)
-  then
-    echo "  Installing Homebrew for you."
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  fi
-}
+install_zsh () {
+  grep -qF "$(which zsh)" /etc/shells || echo "$(which zsh)" | sudo tee --append /etc/shells
 
-clone_repo () {
-  if [ -d "$DOTFILES_ROOT" ]
+  OH_MY_ZSH=~/.oh-my-zsh
+  if [ ! -d "$OH_MY_ZSH" ]
   then
-    cd "$DOTFILES_ROOT"
-    if [ ! "$(ls -A "$DOTFILES_ROOT")" ]
-    then
-      info "$DOTFILES_ROOT exists but is empty, cloning repo"
-      git clone "$REPO_URL" "$DOTFILES_ROOT"
-    elif [ ! -d '.git' ] || [ "$(git config --get remote.origin.url)" != "$REPO_URL" ]
-    then
-      fail "Data in $DOTFILES_ROOT, cannot clone repo"
-    fi
-    cd "$old_dir"
+    info 'Installing Oh My Zsh'
+    git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git "$OH_MY_ZSH" || {
+      printf "Error: git clone of oh-my-zsh repo failed\n"
+      exit 1
+    }
+
+    chsh -s "$(which zsh)"
   else
-    git clone "$REPO_URL" "$DOTFILES_ROOT"
+    info 'Oh My Zsh already installed, skipping'
   fi
-  cd "$DOTFILES_ROOT"
 }
 
 install_homebrew
 clone_repo
 setup_gitconfig
-install_dotfiles
 
-# If we're on a Mac, let's install and setup homebrew.
-#if [ "$(uname -s)" == "Darwin" ]
-#then
-#  info "installing dependencies"
-#  if source bin/dot | while read -r data; do info "$data"; done
-#  then
-#    success "dependencies installed"
-#  else
-#    fail "error installing dependencies"
-#  fi
-#fi
+# Run Homebrew through the Brewfile
+info "› brew bundle"
+brew bundle | while read line; do info "$line"; done
+
+install_dotfiles
+install_zsh
+
+# Set macOS defaults
+$DOTFILES_ROOT/macos/set-defaults.sh
+
+# The Brewfile handles Homebrew-based app and library installs, but there may
+# still be updates and installables in the Mac App Store. There's a nifty
+# command line interface to it that we can use to just install everything, so
+# yeah, let's do that.
+info "› sudo softwareupdate -i -a"
+sudo softwareupdate -i -a 2>&1 | while read line; do info "$line"; done
 
 echo ''
 echo '  All installed!'
