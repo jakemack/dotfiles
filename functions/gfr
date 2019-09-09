@@ -1,0 +1,15 @@
+gfr() {
+  git checkout develop
+  git pull
+  git checkout master
+  git pull
+  local latest_tag=$(git describe --exact-match)
+  if [ -n "$latest_tag" ]
+  then
+    local next_tag=$(semver bump $1 $latest_tag)
+    git flow release start $next_tag
+    git flow release finish -p --pushproduction --pushdevelop --pushtag -m "$next_tag" $next_tag
+  else
+    echo "Could not determine latest tag"
+  fi
+}

@@ -21,5 +21,6 @@
   default = simple
 [pager]
   log = less
+  stash =
 [tag]
   sort = v:refname

@@ -1,0 +1,8 @@
+vbss() {
+  if [ -n "$1" ]
+  then
+    VBoxManage controlvm "$1" savestate
+  else
+    echo "Save state for which VM?"
+  fi
+}

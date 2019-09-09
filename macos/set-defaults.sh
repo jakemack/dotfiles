@@ -60,6 +60,9 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 # defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.battery" -bool true
 defaults write com.apple.menuextra.battery ShowPercent YES
 
+# Show Day, Date, and seconds in time
+defaults write com.apple.menuextra.clock "DateFormat" 'EEE d MMM hh:mm:ss a'
+
 ###############################################################################
 # SSD-specific tweaks                                                         #
 ###############################################################################

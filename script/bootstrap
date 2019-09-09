@@ -184,6 +184,18 @@ install_zsh () {
   fi
 }
 
+set_up_structure() {
+  if [ ! -d "$HOME/code" ]; then mkdir "$HOME/code"; fi
+  if [ ! -d "$HOME/code/workspace" ]; then mkdir "$HOME/code/workspace"; fi
+  if [ ! -d "$HOME/code/play" ]; then mkdir "$HOME/code/play"; fi
+  if [ ! -d "$HOME/vbox" ]; then mkdir "$HOME/vbox"; fi
+}
+
+#install_github() {
+#  eval $(op signin my)
+#  op get item github.com | jq -r '.details.sections[] | select(.title == "Auth").fields[] | select(.t == "Access Token").v'
+#}
+
 install_homebrew
 clone_repo
 setup_gitconfig
