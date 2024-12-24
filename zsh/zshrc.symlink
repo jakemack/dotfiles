@@ -1,22 +1,28 @@
+zmodload zsh/zprof
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export DOTFILES_PATH="$HOME/.dotfiles"
 export ZSH_CUSTOM="$DOTFILES_PATH/omz_customizations"
 
 # If you come from bash you might have to change your $PATH.
-export PATH=/usr/local/bin:$DOTFILES_PATH/bin:$HOME/.cargo/bin:$PATH
+export PATH=$DOTFILES_PATH/bin:$PATH
+
+# # Add ENV variables to properly use readline and openssl during rbenv Ruby builds
+# local READLINE_PATH=/usr/local/opt/readline # If this stops working, update path with "brew --prefix readline"
+# local OPENSSL_PATH=/usr/local/opt/openssl@3 # If this stops working, update path with "brew --prefix openssl"
+# #  local READLINE_PATH=$(brew --prefix readline)
+# #  local OPENSSL_PATH=$(brew --prefix openssl)
+# export LDFLAGS="-L$READLINE_PATH/lib -L$OPENSSL_PATH/lib"
+# export CPPFLAGS="-I$READLINE_PATH/include -I$OPENSSL_PATH/include"
+# export PKG_CONFIG_PATH="$READLINE_PATH/lib/pkgconfig:$OPENSSL_PATH/lib/pkgconfig"
+# export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$OPENSSL_PATH"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="af-magic"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+ZSH_THEME="af-magic-custom"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -31,18 +37,12 @@ ZSH_THEME="af-magic"
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-)
+plugins=(evalcache)
 
 fpath=($DOTFILES_PATH/functions $fpath)
 autoload -U $DOTFILES_PATH/functions/*(:t)
@@ -52,11 +52,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+export EDITOR='nano'
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"

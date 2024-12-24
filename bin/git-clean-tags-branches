@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Delete all local branches that have been merged into HEAD. Stolen from
+# our favorite @tekkub:
+
+# Clean up merged, local branches
+git branch -d `git branch --merged=master | grep -v '^*' | egrep -v 'master|develop' | tr -d '\n'`
+# Clean up tracking branches
+git remote prune origin
+# Delete merged in remote branches
+git branch --list "origin/*" -r --merged=master | grep -v '^*' | egrep -v "master|develop" | xargs git branch -r -d
+# Delete remote tags:  git tag -l | egrep -v "^3.3" | xargs git push origin --delete
+git tag -l | xargs git tag -d
+git fetch -t

@@ -1,0 +1,10 @@
+vbbase() {
+  if [ -n "$1" ]
+  then
+    VBoxManage controlvm "$1" poweroff
+    VBoxManage snapshot "$1" restore "Base"
+    VBoxManage startvm --type headless "$1"
+  else
+    echo "Restore which VM to Base"
+  fi
+}

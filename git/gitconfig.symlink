@@ -24,3 +24,18 @@
   stash =
 [tag]
   sort = v:refname
+[user]
+	name = Jake Mack
+	email = jakemack@gmail.com
+[pull]
+	ff = only
+# [diff]
+#	external = difft
+[credential]
+	helper = /usr/local/share/gcm-core/git-credential-manager
+[init]
+	defaultBranch = main
+[credential "https://git.heroku.com"]
+	provider = generic
+[credential "https://dev.azure.com"]
+	useHttpPath = true
