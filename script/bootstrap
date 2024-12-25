@@ -196,16 +196,15 @@ set_up_structure() {
 #  op get item github.com | jq -r '.details.sections[] | select(.title == "Auth").fields[] | select(.t == "Access Token").v'
 #}
 
-install_homebrew
 clone_repo
+install_dotfiles
+install_zsh
+install_homebrew
 setup_gitconfig
 
 # Run Homebrew through the Brewfile
 info "› brew bundle"
 brew bundle | while read line; do info "$line"; done
-
-install_dotfiles
-install_zsh
 
 # Set macOS defaults
 $DOTFILES_ROOT/macos/set-defaults.sh

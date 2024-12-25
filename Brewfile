@@ -57,6 +57,7 @@ cask 'sublime-text'
 cask 'the-unarchiver'
 # cask 'transmission', args: { appdir: "/Applications" }
 # cask 'virtualbox'
+cask 'visual-studio-code'
 # cask 'wavebox'
 # cask 'wireshark', args: { appdir: "/Applications" }
 # cask 'zoom'

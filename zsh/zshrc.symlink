@@ -8,6 +8,11 @@ export ZSH_CUSTOM="$DOTFILES_PATH/omz_customizations"
 # If you come from bash you might have to change your $PATH.
 export PATH=$DOTFILES_PATH/bin:$PATH
 
+if [[ -a /opt/homebrew/bin/brew ]]
+then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # # Add ENV variables to properly use readline and openssl during rbenv Ruby builds
 # local READLINE_PATH=/usr/local/opt/readline # If this stops working, update path with "brew --prefix readline"
 # local OPENSSL_PATH=/usr/local/opt/openssl@3 # If this stops working, update path with "brew --prefix openssl"
