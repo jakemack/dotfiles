@@ -166,6 +166,21 @@ install_dotfiles () {
   done
 }
 
+# TODO: Not working for ghostty
+#install_config_files () {
+#  info 'installing dotfiles'
+#
+#  local overwrite_all=false backup_all=false skip_all=false
+#
+#  for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.configlink')
+#  do
+#    config_dir="$(basename "$(dirname "$src")")"
+#    mkdir "$HOME/.config/$config_dir"
+#    dst="$HOME/.config/$config_dir/$(basename "${src%.*}")"
+#    link_file "$src" "$dst"
+#  done
+#}
+
 install_zsh () {
   grep -qF "$(which zsh)" /etc/shells || echo "$(which zsh)" | sudo tee --append /etc/shells
 
@@ -189,6 +204,7 @@ set_up_structure() {
   if [ ! -d "$HOME/code/workspace" ]; then mkdir "$HOME/code/workspace"; fi
   if [ ! -d "$HOME/code/play" ]; then mkdir "$HOME/code/play"; fi
   if [ ! -d "$HOME/vbox" ]; then mkdir "$HOME/vbox"; fi
+  if [ ! -d "$HOME/.config" ]; then mkdir "$HOME/.config"; fi
 }
 
 #install_github() {
@@ -201,6 +217,7 @@ install_dotfiles
 install_zsh
 install_homebrew
 setup_gitconfig
+#install_config_files
 
 # Run Homebrew through the Brewfile
 info "› brew bundle"
