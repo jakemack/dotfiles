@@ -1,0 +1,30 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+# Install Homebrew if not found
+if ! command -v brew &> /dev/null; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # Set up brew in the current session
+    if [[ -d /opt/homebrew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -d /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+fi
+
+# Run brew bundle (using the Brewfile in the repo)
+# Chezmoi maps the source Brewfile to the target directory or you can reference it directly from the source.
+# For run_onchange, we want to re-run if Brewfile changes.
+# {{ include "Brewfile" | sha256sum }}
+
+echo "Running brew bundle..."
+brew bundle --file={{ joinPath .chezmoi.sourceDir "Brewfile" }}
+
+# Run macOS defaults
+# {{ include "macos/set-defaults.sh" | sha256sum }}
+echo "Setting macOS defaults..."
+/bin/bash {{ joinPath .chezmoi.sourceDir "macos/set-defaults.sh" }}
+
+{{ end -}}

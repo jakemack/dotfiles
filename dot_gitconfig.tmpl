@@ -1,8 +1,5 @@
-# Local/private config goes in the include
-[include]
-  path = ~/.gitconfig.local
 [alias]
-  wtf     = !$DOTFILES_PATH/bin/git-wtf
+  wtf     = !~/.local/bin/git-wtf
   count   = !git shortlog -sn
 [color]
   ui = auto
@@ -25,8 +22,8 @@
 [tag]
   sort = v:refname
 [user]
-	name = Jake Mack
-	email = jakemack@gmail.com
+	name = {{ .name | quote }}
+	email = {{ .email | quote }}
 [pull]
 	ff = only
 # [diff]
